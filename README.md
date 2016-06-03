@@ -7,6 +7,14 @@ I'm doing nanogenmo in June this year, becauase I'm otherwise employed during No
 This file is where I keep track of what I've done, plan to do, or even vaguely wonder about doing.
 
 
+## What works so far.
+
+I've ignored the various grandiose plans I've been hatching, and just went ahad and wrote count.ml.  Upi will need an ocaml implementation to run it.  Ocaml is free softwre, and is available for Mac, Windows, and Linux.  For gnu make, the command is
+     make unittest
+There will possibly be variations on this trivial story before the month is up.
+
+I found it surprisingly difficult to get the details of Emnglis number syntax right.
+
 ## Discussion on various ways to approach the problem
 
 ### Activities
