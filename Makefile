@@ -8,7 +8,7 @@
 
 README.html: README.md
 	omd README.md >README.html
-count.html:
+count.html: count.ml
 	ocaml count.ml >count.html
-unittest:
+unittest: count.ml
 	ocaml count.ml --unittest >unittest
