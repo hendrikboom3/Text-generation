@@ -4,7 +4,7 @@ Algorithms, data, and code for generating text.
 
 I'm doing nanogenmo in June this year, becauase I'm otherwise employed during November.  But whether I'll actually accomplish something, or just explore the intellectual space remains to be seen.  This page is a collection of thoughts, ranging from the trivial to the substantial.  It's a work-in-progress, and will probably remain one until it is abandoned.
 
-This file is where I keep track of what I've done, plan to do, or een vaguey wonder about doing.
+This file is where I keep track of what I've done, plan to do, or even vaguely wonder about doing.
 
 
 ## Discussion on various ways to approach the problem
@@ -14,7 +14,8 @@ This file is where I keep track of what I've done, plan to do, or een vaguey won
 This is probably more work than fits in a month already:
 
 * Find out what has been done already.
-* make the components described below.
+* make the components described below, or
+* Do something else entirely.
 
 ## What has been done already.
 

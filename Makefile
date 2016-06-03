@@ -8,6 +8,4 @@
 
 0README.html: 0README.md
 	omd 0README.md >0README.html
-publish: 0README.html
-	cp 0README.html ~/farhome/hendrik/www/www/nanogenmo/
 
