@@ -4,7 +4,7 @@ Algorithms, data, and code for generating text.
 
 I'm doing nanogenmo in June this year, becauase I'm otherwise employed during November.  But whether I'll actually accomplish something, or just explore the intellectual space remains to be seen.  This page is a collection of thoughts, ranging from the trivial to the substantial.  It's a work-in-progress, and will probably remain one until it is abandoned.
 
-This file is where I keep track of what I've done, plan to do, or even vaguely wonder about doing.
+This file is where I keep track of what I've done, plan to do, or even vaguely wonder about doing.  The project is hosted at https://github.com/hendrikboom3/Text-generation .
 
 
 ## What works so far.
