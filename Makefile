@@ -12,3 +12,5 @@ count.html: count.ml
 	ocaml count.ml >count.html
 unittest: count.ml
 	ocaml count.ml --unittest >unittest
+ord.html: ord.ml
+	ocaml ord.ml >ord.html

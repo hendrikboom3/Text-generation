@@ -9,11 +9,14 @@ This file is where I keep track of what I've done, plan to do, or even vaguely w
 
 ## What works so far.
 
-I've ignored the various grandiose plans I've been hatching, and just went ahad and wrote count.ml.  Upi will need an ocaml implementation to run it.  Ocaml is free softwre, and is available for Mac, Windows, and Linux.  For gnu make, the command is
+I've ignored the various grandiose plans I've been hatching, and just went ahead and wrote count.ml.  Upi will need an ocaml implementation to run it.  Ocaml is free softwre, and is available for Mac, Windows, and Linux.  For gnu make, the command is
      make unittest
 There will possibly be variations on this trivial story before the month is up.
 
-I found it surprisingly difficult to get the details of Emnglis number syntax right.
+I found it surprisingly difficult to get the details of Englihs number syntax right.
+
+2016 06 04: I'm writing another one: this time I have the counting go transfinite through some constructible ordinals.  The first version of this is in ord.ml.  Unfortunately, the code has become a mess.  I have to rewrite.  I'll be building a data structure to express the ordinals that can easily be constructed in uniform loops, without exception for zero and one, and I'll perform simplification to reduce things like omega squared time zero plus seven to just seven, making it llook idiomatic.  That part isn't working yet.  But when it does, the output will improve, and a lot of the tricky code will disappear.
+
 
 ## Discussion on various ways to approach the problem
 
@@ -140,4 +143,8 @@ Some kind of logic engine on the database, to draw obvious conclusions.  This wi
 ### Context
 
 I have no idea whether this could possibly fit with my as yet nonexistent project to randomly generate cities.  That requires a geometry database.
+
+### Ordinal program.
+
+Neext project, to count ordinals.  Not the trouble with ordinals is that given any mechanism for gennerating them, there's another bigger one that hasn't been covered yet.  Not to mention that to get to $$\omega$$ there's in infinite number of them to enumerate first, so it's necessary to skip a lot of them.  I think I'm going to have to just start and see what happens.
 
