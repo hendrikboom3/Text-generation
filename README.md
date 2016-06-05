@@ -13,10 +13,13 @@ I've ignored the various grandiose plans I've been hatching, and just went ahead
      make unittest
 There will possibly be variations on this trivial story before the month is up.
 
-I found it surprisingly difficult to get the details of Englihs number syntax right.
+I found it surprisingly difficult to get the details of English number syntax right.
 
-2016 06 04: I'm writing another one: this time I have the counting go transfinite through some constructible ordinals.  The first version of this is in ord.ml.  Unfortunately, the code has become a mess.  I have to rewrite.  I'll be building a data structure to express the ordinals that can easily be constructed in uniform loops, without exception for zero and one, and I'll perform simplification to reduce things like omega squared time zero plus seven to just seven, making it llook idiomatic.  That part isn't working yet.  But when it does, the output will improve, and a lot of the tricky code will disappear.
+2016 06 04: I'm writing another one: this time I have the counting go transfinite through some constructible ordinals.  The first version of this is in ord.ml.  Unfortunately, the code has become a mess.  I have to rewrite.
 
+I did that, by building a new data structure to express the ordinals.  These can easily be constructed in uniform loops.  I no longer need to mess with the control flow to avoid printing expressions involving zeros and ones, because I use a generic simplification routine to reduce things like omega squared times zero plus seven to just seven, making it look idiomatic.  That part is now working, but it is not well-intergrated with the narrative.  I will next have to provide hooks to get the appropriate story narrative in the proper places.  The trick is to introduce the patterns in the numbers when they first become relevant, and the to say the equivalent of "more of same".
+
+I'll probably just clean up this code, and then stop development of the ordinal counter for now, because it has become clear that all the math in the page is overloading the browser, which has to use mathjax.js to present it, and it's not fast.
 
 ## Discussion on various ways to approach the problem
 
