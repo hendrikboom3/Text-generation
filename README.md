@@ -63,6 +63,7 @@ Here I prowl the Resources sections of the nanogenmo git repositories and collec
         * some [NYPL-related](http://digitalcollections.nypl.org/about) resources
         * if you want to add some savory meals to your novel, you could try the [NYPL menus dataset](http://menus.nypl.org/data)
         * a [sanitized version of the menus dataset](http://menus.nypl.org/data) by @trevormunoz and Katie Rawson
+	* A [pdf about text analysis on these data](https://blogs.princeton.edu/etc/files/2014/03/Text-Analysis-with-NLTK-Cheatsheet.pdf)
       *  enkiv2 commented on Oct 26, 2015 
         * [GGC](https://github.com/enkiv2/ggc): Compile nonrecursive generative grammars to python
         * Some text transformers, some novelty generators. Do things like modifying the profanity level of a text, generate verbal abuse, and the like. 
@@ -77,7 +78,38 @@ Here I prowl the Resources sections of the nanogenmo git repositories and collec
         * On Sat, Oct 31, 2015 at 11:20 AM Isaac Karth wrote: Source codes for historical AI storytelling systems -- micro-Talespin and Talespin, Eloza-doctor, Skald
       * MichaelPaulukonis's [NMGM repo](https://github.com/MichaelPaulukonis/NaNoGenMo2015)
     * Resources posted November 1 and later.
-      *
+      * [The Stanford Geospatial Network Model of the Roman World:](http://orbis.stanford.edu/) provides information about travel costs and times badk around 200 BC.
+      * [Extractor](https://github.com/TheCommieDuck/nell-extractor) from CMU's NELL ontology.  TODO: look into this further.
+      * [Project GITenberg](https://gitenberg.github.io/)  Like Gutenberg, but in git.
+      * [Virgil's Commonplace Book](https://github.com/dariusk/NaNoGenMo-2015/issues/15) Fasciating discussion about the spectrum of possibilities in text generation.
+      * [Perseus Digital Library](http://www.perseus.tufts.edu/hopper/) A site studying how the sum of human literary experience (including present and future media) can be made maximally useful.  Its initial focus was teh calssical Geek, Latin and Arabic world.
+      * [neural storyteller generates stories about images](https://github.com/ryankiros/neural-storyteller), with [sample text](https://medium.com/@samim/generating-stories-about-images-d163ba41e4ed).
+      * ikarth reports:
+        * [Linked Data](http://linkeddata.org/) has links to a large number of datasets, many of which are also Open Data.
+        * [Datahub](http://datahub.io/about) lists a large number of datasetes, and can be filtered by license, if you're only interested in public domain or Creative Commons datasets.
+        * [Pleiades](http://pleiades.stoa.org/) is a gazetteer of ancient geographic places.
+	* [Baba](https://github.com/Lokaltog/baba) - a Javascript-based designer for text generators.  A text generator generator?
+	* [A thread for beginner's questions and tutorials](https://github.com/dariusk/NaNoGenMo-2015/issues/152)  TODO: study this
+	
+      * hugovk reports:
+        * a [JavaScript, Python, Ruby and PHP word filter](https://github.com/dariusk/wordfilter)
+	* a [headline filter](https://github.com/molly/CyberPrefixer/blob/master/offensive.py)
+	* [Tips on transphobic joke detection](http://tinysubversions.com/notes/transphobic-joke-detection/)
+	* Some lists of bad words
+	  * [1](https://github.com/shutterstock/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words)
+          * [2](https://gist.github.com/ryanlewis/a37739d710ccdb4b406d)
+	  * [3](http://www.bannedwordlist.com/lists/swearWords.txt)
+	* [muted Twitter topics](https://github.com/sjml/bot-innocence)
+	* general etiquette
+	  * [1]( http://tinysubversions.com/2013/03/basic-twitter-bot-etiquette/)
+	  * [2](http://www.crummy.com/2013/11/27/0) 
+      * greg-kenedy's (markov chain generator in Perl)[https://github.com/greg-kennedy/MarkovChain]
+      * MichaelPaulukonis reports:
+        * [longest novels]https://en.wikipedia.org/wiki/List_of_longest_novels
+	* [Top 100 Gutenberg text]https://www.gutenberg.org/browse/scores/top
+	* [Gutenberg tips and tricks]http://ebookfriendly.com/project-gutenberg-tips-tricks/
+	* [Vocabulary analysis pf Project Gutenberg]http://www.mine-control.com/zack/guttenberg/
+	* [myna](https://github.com/kn/myna) turns tweets into English.
       
     * [off-season writing](https://github.com/dariusk/NaNoGenMo-2015/issues/197)
     * The [2015 wiki](https://github.com/dariusk/NaNoGenMo-2015/wiki) appears to ne empty.
