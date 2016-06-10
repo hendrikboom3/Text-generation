@@ -7,7 +7,7 @@ I'm doing nanogenmo in June this year, becauase I'm otherwise employed during No
 This file is where I keep track of what I've done, plan to do, or even vaguely wonder about doing.  The project is hosted at https://github.com/hendrikboom3/Text-generation .
 
 
-## What works so far.
+## What's working now.
 
 I've ignored the various grandiose plans I've been hatching, and just went ahead and wrote count.ml.  Upi will need an ocaml implementation to run it.  Ocaml is free softwre, and is available for Mac, Windows, and Linux.  For gnu make, the command is
      make unittest
@@ -23,13 +23,131 @@ I'll probably just clean up this code, and then stop development of the ordinal 
 
 ## Discussion on various ways to approach the problem
 
+Set my ordinals and counting aside.  They were fun, they produced words, but they lead nowhere.  Though I still would like to get the flavour text into the ordinal program sometime.  But probably not for ths month. 
+
+### what seems to be needed.
+
+* A model for the reality of the story.  Information about the world.
+  * As a dungeonmaster, I've always based everything on a map.  Is this feasible here?
+  * First-order logic as a notation?
+  * Triples store and is-a relations as a simplified first-order logic?
+  * A transition calculus.  (Linear logic was used tor this)
+* Characters, with motives, abilities, knowledge and limitations.
+  * Knowledge -- represented like the model, but tagged with who knows it.  Or, equivalently, an entire world model for each character
+  * actions can be formulated in a linear-logic style.  But not naively, if we also have other kinds of deduction around.
+* Some kind of engine taking the above information and translating it into events and state changes.  This could well be the difficult part.  Just doing things whenever they happen to be possible gives us a random walk through a potentially large state space.  A goal-directed deduction system, perhaps prolog-like, might be appropriate.  Always remember -- we're not trying to formalize mathematics; we're not trying to accomplish all possible conclusions.
+  * Can do deduction from a character's state of knowledge and his motivations
+  * Can do deduction from the actual world and the author's intentions.
+  * Or, more simply, from the characters' inteintions and the actual state of the world (thereby eliminating misinformation).
+* Having irrevesible actions will force some direction into the random walk. Irreversible actions can include 
+  * Character learning something
+  * Change of motivation
+  * Environmental change.
+  * Death or damage to a character (change of state may not be permanent, but be long-lasting)
+
+Setting up such transitions might be able to drive something resembing a plot.
+Also need a planning engine to get the characters' actions fo relate to their motivations.
+
+This seems a lot to set up in what remains of a month.  Unless tools for this are already available and easy to learn the use of.
+
+#### Goal-direction.
+
+Continue brainstorming.
+  
+* Implementations of purpose: The/Each character has a purpose.
+  * This could be reflected in a set of kind of actions he prefers doing.
+  * It could be reflected in an evaluaton function of states likely to be achieved by actions.
+  * Could do a partial action tree search to determine what's best.
+  * There's room for some logic, perhaps special-purpose code, here.
+  * The evaluation function, instead of being a wighted sum, could be somewhat random.
+
+* There are two basic ways to decide what to write next.
+  * start with the present situation and see what actions are possible.  Pick one.  Possibly form a tree of future possible actions and see what they accomplish, using one or more evaluation functions.
+  * Start with a goal and work backwards to find ways of achieving it.  Again, can work (backwards this time) to form a tree of possiblities and see if any of them leads from the present state.
+  * Both of these are tree searches with possibly large fanout.  It may be worthwhile to use approximate or partial models of the state with approximate actions to make a plan and then to work out the details using the situations in the approximation as goals for detailed work.
+
+* Am I in the process of implementing a general-purpose planning system?
+
+* my mental models of the story
+  * find one's way out of or into a maze.
+    * add to character's mental map, change position in real-world map
+  * find clues to a mystery
+    * add to character's information base, possibly enabling deductions.
+      * Initially, these deductions will probablly be hand-coded specific to the scenario.
+  * find enjoyable things to do en route.
+  * It seems there should be other possible generic plots.
+  
+* random scenario details
+  * a cat or two that wanders about the place.
+    * A catty one and a purry one.  They can look almost the same.
+  * a dog that chases cats up trees.
+  * maybe discover within the story what is to be investigated (like the corpse in the bathtub in Swallows) rather the have it built in initially.
+  * recognise when you arrive somewhere you've been before.
+  * have causes to guess information you don't know.  use it for planning, but erse it when shown false, or confirm it when shown true.
+  * remember when Peanut wanted to play with a cat, and the cat just didn't understand?
+  
+
 ### Activities
 
 This is probably more work than fits in a month already:
 
-* Find out what has been done already.
 * make the components described below, or
 * Do something else entirely.
+
+### Components
+
+#### text generator
+
+I'll want a text generator that somewhat respects the rules of English grammar.
+
+#### database
+
+I'll want something like a triple store, that stores facts about the world.
+It should, ideally be possible to have triples in the store be objects that can be mentioned in other triples.
+There needs to be a way to write a triple store, read it in, with type checking, modify it if things happen in the story, and write it out again.
+
+A data base?  Maybe.  It will probably have to be a heterogenous one, and to make it fast, it will probably work entirely in RAM, reading and writing to some human readable form that might be editable by humans.
+
+What could be in the database?
+
+Maybe subject-verb-object triples.
+Triples need to have IDs themselves, so they can be referened.  It's probably important to be able to record which characters know which facts.  THen the deductino engine should be able to reason based on what a specific character knows.  Maybe this is a feature for later; it may be too much for an initial system.  But something like this is necessary to give proper scope to a character's motivations.  There will have to be some way of identifying which facts *everybody* knows; otherwise the number of stored A-knows-B facts will explode.
+
+I call them triples, they are perhaps more properly called predications.  Or even just facts.  The verb would be the predicate, and they could be n-ary.  I could go all combinatory-logic on this, but let's not.
+
+Some typical facts:
+* A is a member of B.
+* A is a subset of B.
+* Every A satisfies B.
+
+There will probably have to be individuals, such as "Bob", and generic entities, such as "a man".
+
+I've got to work this our carefully.  Maybe that book on taxonomy will help.
+There has to be very limited deduction, and the facts will have to be organised to make this fast.  I'm not looking for a full first-order theorem prover, even.
+
+#### Revison management
+
+The revision management system will be git and github.  That's the one used for nanogenmo.
+.
+#### Deduction
+
+Some kind of logic engine on the database, to draw obvious conclusions.  This wil probably grow on demand, as I need it, as it becomes more convenient to use general tools on data stored in the database than to code special cases.  Havinf code in the data base woud be nice, too, but that would only work if the system is written in something like a List, rather than something like OCaml.
+
+#### Some kind of planning system.
+
+This could be a variant on the deduction system.
+
+### Context
+
+I have no idea whether this could possibly fit with my as yet nonexistent project to randomly generate cities.  That requires a geometry database.
+
+### Ordinal program.
+
+Next project, to count ordinals.  Not the trouble with ordinals is that given any mechanism for gennerating them, there's another bigger one that hasn't been covered yet.  Not to mention that to get to $$\omega$$ there's in infinite number of them to enumerate first, so it's necessary to skip a lot of them.  I think I'm going to have to just start and see what happens.
+
+
+
+
 
 ## What has been done already.
 
@@ -125,61 +243,6 @@ Here I prowl the Resources sections of the nanogenmo git repositories and collec
   * [Generating Narrative Variation in Interactive Fiction](http://nickm.com/if/Generating_Narrative_Variation_in_Interactive_Fiction.pdf)  I glanced at this one. The pdf isn't really conducive to reading on a computer, but I found the rather interesting glossary on pdf page 164.
   * Overworld [part 1](http://bytten-studio.com/devlog/2014/09/08/overworld-overview-part-1/) and [part 2](http://bytten-studio.com/devlog/2014/09/15/overworld-overview-part-2/).  Fairly simple world generation, but with support for game structure.  These posts are part of the [development archive](http://bytten-studio.com/devlog//archive.html) for a game called [Lenna's Inception](http://lennasinception.com/about/).
   * [Text-Adventure games as a text-generation engine](https://github.com/MichaelPaulukonis/NaNoGenMo.yawp/tree/master/npc)  The Swallows stuff, but a lot of interesting links; q.v. sometime.
-  * [Teen House Party](https://gist.github.com/dariusk/c76c8f373ebcb6d6af8e)  A little more interesting, but it;s ot clear whether emotions are merely a decorative add-on, with no real effect on story
+  * [Teen House Party](https://gist.github.com/dariusk/c76c8f373ebcb6d6af8e)  A little more interesting, but it's not clear whether emotions are merely a decorative add-on, with no real effect on story
   * [Procjam 2014](http://procjam.tumblr.com/post/99689402659/procedural-generation-tutorials-getting-started)
   * [Procedural Generation 1](http://web.archive.org/web/20110825054218/http://properundead.com/2009/03/cave-generator.html)
-
-
-
-
-### Components
-
-#### text generator
-
-I'll want a text generator that somewhat respects the rules of English grammar.
-
-#### database
-
-I'll want something like a triple store, that stores facts about the world.
-It should, ideally be possible to have triples in the store be objects that can be mentioned in other triples.
-There needs to be a way to write a triple store, read it in, with type checking, modify it if things happen in the story, and write it out again.
-
-A data base?  Maybe.  It will probably have to be a heterogenous one, and to make it fast, it will probably work entirely in RAM, reading and writing to some human readable form that might be editable by humans.
-
-What could be in the database?
-
-Maybe subject-verb-object triples.
-Triples need to have IDs themselves, so they can be referened.  It's probably important to be able to record which characters know which facts.  THen the deductino engine should be able to reason based on what a specific character knows.  Maybe this is a feature for later; it may be too much for an initial system.  But something like this is necessary to give proper scope to a character's motivations.  There will have to be some way of identifying which facts *everybody* knows; otherwise the number of stored A-knows-B facts will explode.
-
-I call them triples, they are perhaps more properly called predications.  Or even just facts.  The verb would be the predicate, and they could be n-ary.  I could go all combinatory-logic on this, but let's not.
-
-Some typical facts:
-* A is a member of B.
-* A is a subset of B.
-* Every A satisfies B.
-
-There will probably have to be individuals, such as "Bob", and generic entities, such as "a man".
-
-I've got to work this our carefully.  Maybe that book on taxonomy will help.
-There has to be very limited deduction, and the facts will have to be organised to make this fast.  I'm not looking for a full first-order theorem prover, even.
-
-#### Revison management
-
-I'll need a revision management system, such as monotone, which I'm familiar with, and also a way to publish onto github, where others are working on similar projects.  git could of course be my revision management system.
-
-One way of having both systems is of course to have the metadata for both sitting around in my working directory, and committing,  syncing, and/or pushing eash when appropriate.
-
-If I do github, I'll probably also make reports [here](https://github.com/dariusk/NaNoGenMo-2015/issues/197)
-.
-#### Deduction
-
-Some kind of logic engine on the database, to draw obvious conclusions.  This wil probably grow on demand, as I need it, as it becomes more convenient to use general tools on data stored in the database than to code special cases.  Havinf code in the data base woud be nice, too, but that would only work if the system is written in something like a List, rather than something like OCaml.
-
-### Context
-
-I have no idea whether this could possibly fit with my as yet nonexistent project to randomly generate cities.  That requires a geometry database.
-
-### Ordinal program.
-
-Neext project, to count ordinals.  Not the trouble with ordinals is that given any mechanism for gennerating them, there's another bigger one that hasn't been covered yet.  Not to mention that to get to $$\omega$$ there's in infinite number of them to enumerate first, so it's necessary to skip a lot of them.  I think I'm going to have to just start and see what happens.
-
