@@ -19,7 +19,14 @@ I found it surprisingly difficult to get the details of English number syntax ri
 
 I did that, by building a new data structure to express the ordinals.  These can easily be constructed in uniform loops.  I no longer need to mess with the control flow to avoid printing expressions involving zeros and ones, because I use a generic simplification routine to reduce things like omega squared times zero plus seven to just seven, making it look idiomatic.  That part is now working, but it is not well-intergrated with the narrative.  I will next have to provide hooks to get the appropriate story narrative in the proper places.  The trick is to introduce the patterns in the numbers when they first become relevant, and the to say the equivalent of "more of same".
 
-I'll probably just clean up this code, and then stop development of the ordinal counter for now, because it has become clear that all the math in the page is overloading the browser, which has to use mathjax.js to present it, and it's not fast.
+It now counts up to  $omega^{\omega 2+3} 3+\omega^{3} 3+\omega^{3}$
+the Unix wc utility tells me it has 69988 words, some of which are surely HTML tags.
+
+I now have a new appreciation for the size of these constructive ordinals.  And this isn't even close to the league of big constructive ordinals.
+
+The math on the page overloads my browser.  iceweasel/firefoxx gave up long ago.  Midori gave out when the wordcount approached 50000.  Chrome will still display the entire page, but it takes it ages to do the whole page, and mathjax produces an error message after displaying everything correctly.  Under the circumstances, if the novel isn't perfect, too bad.
+
+Perhaps I should try again with straight LATEX output.  Who knows?  It might be practical.
 
 ## Discussion on various ways to approach the problem
 
@@ -54,17 +61,18 @@ This seems a lot to set up in what remains of a month.  Unless tools for this ar
 
 Continue brainstorming.
   
-* Implementations of purpose: The/Each character has a purpose.
+* Implementations of purpose: The/Each character has motivations.  These can differe among characters.
   * This could be reflected in a set of kind of actions he prefers doing.
   * It could be reflected in an evaluaton function of states likely to be achieved by actions.
   * Could do a partial action tree search to determine what's best.
   * There's room for some logic, perhaps special-purpose code, here.
-  * The evaluation function, instead of being a wighted sum, could be somewhat random.
+  * The evaluation function could be somewhat random instead of being the usual weighted sum.
 
 * There are two basic ways to decide what to write next.
   * start with the present situation and see what actions are possible.  Pick one.  Possibly form a tree of future possible actions and see what they accomplish, using one or more evaluation functions.
   * Start with a goal and work backwards to find ways of achieving it.  Again, can work (backwards this time) to form a tree of possiblities and see if any of them leads from the present state.
-  * Both of these are tree searches with possibly large fanout.  It may be worthwhile to use approximate or partial models of the state with approximate actions to make a plan and then to work out the details using the situations in the approximation as goals for detailed work.
+  * Both of these are tree searches with possibly large fanout, and some of the fanout may be irrelevant to the goal, and time-wasting.  It may be worthwhile to use approximate or partial models of the state with approximate actions to make a plan and then to work out the details using the situations in the approximations as goals for detailed work.
+  * TO do any of these will require me to learn.  Have to start with the simplest thing that  could possibly work, and repeatedlt replace and rewrite, not being afraid to replace everything.
 
 * Am I in the process of implementing a general-purpose planning system?
 
@@ -74,18 +82,53 @@ Continue brainstorming.
   * find clues to a mystery
     * add to character's information base, possibly enabling deductions.
       * Initially, these deductions will probablly be hand-coded specific to the scenario.
-  * find enjoyable things to do en route.
+  * find enjoyable or satisfying things to do en route.
+    * find and kill monsters (traditional video game scenario)
+    * socialize (itself an AI problem)
+    * View artwork
+      * In a story, the artwork has to be presented with emotional significance tthat resonates with the reader.  This may be difficult.
+      * In a game, you can show the artwork.  But gennerating it mechaniclly is still an unsolved problem, much like mechanically writing a novel.
+        * The game could involve roaming visually presented procedurally generated scenery, visually presented.  Some of it will be pretty.
   * It seems there should be other possible generic plots.
-  
-* random scenario details
+
+* It is possible to have a series of subplots that do not invole the POV chaaracter except that he sees them.  They even be scripted as long as each individual one is not repreated much.  You can show a subplot spread out, a scene now, another much later, and so forth.  It becomes the reader's jb to ft the pieces together.  To make this work, you'd have to have a lot of subplots, or you'd rapidly rn out of novelty.
+
+* random scenarios
   * a cat or two that wanders about the place.
-    * A catty one and a purry one.  They can look almost the same.
+    * A catty one and a purry one.  They can look almost the same.  POV character could usually see just one at a time, but occasionally both at once.
   * a dog that chases cats up trees.
   * maybe discover within the story what is to be investigated (like the corpse in the bathtub in Swallows) rather the have it built in initially.
   * recognise when you arrive somewhere you've been before.
   * have causes to guess information you don't know.  use it for planning, but erse it when shown false, or confirm it when shown true.
   * remember when Peanut wanted to play with a cat, and the cat just didn't understand?
-  
+
+* Worldbuilding -- make a world for characters to explore.
+  * a map.
+    * Use any extant map generator.
+      * Could, for example, start with my river algorith or Wander's map, embellished.
+    * emplace places with situatons.
+      * dangers and death threats
+      * combat
+      * negotiation, barter.
+      * barriers, levels of impassibility, bridges
+      * a set of laws
+    * What happens with randomly generated laws?
+  * Could make a whole set of attributes and relationships between people that guide interaction.  Like the teenage house party scenario didn't seem to have enough coherence for.  These can drive plots and personal development.
+    * personal friendships and animosities.
+      * Emotional interactions.
+        * love and jealousy.
+    * personal character
+      * Avarice and generosity.
+    * God hardened Pharoah's heart.
+  * I need to write examples of this stuff in an informal formalism to see how it could be represented and manipulated.  Write transition rules.
+    * Already have two map generators.
+    * I think it's going to end up as a mostly uniform data structure with interpreted rules.  Special code if I have to reference external stuff, like the map.
+      * Need pattern matchers, substitution, replacement, procedural escapes to compiled code.
+
+### Implementation
+
+It looks as if I'm going to want an object system to implement most of this stuff.  The OCaml one, with row polymorphism (which they say others call duck typing, but the case-hardened duck typers say isn't duck typing at all because it's staticallt checkeed) and subtyping, seems attractive.  I  don't know if I'll be using OCaml classes at all.
+ It would be nice ifOCaml's pattern match with subtypes may be the mechanism I need for checking preconditions to rules, but I suspect it won't work.  I guess I'll have to fine out whether partial object types can be used to discover type information at run time that isn't statically available at compile time.  IF that doesn't work, I'll have to interpret the patterns in their rules with my own hand-coded type tests and data structures.
 
 ### Activities
 

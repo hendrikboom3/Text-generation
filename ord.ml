@@ -1,19 +1,28 @@
+(* I think this works, and generates aabout 60K words worth of html of ordinal counting.  wc tells me so.  However, it also couds paragraph tags and the like as words.
+
+Unfortunately, I can't read the result properly, because the amount of mathematical notation in it kills my browsers.
+*)
+
 open Printf
 open Sys
 
 let html = true
 ;;
-let n = 3 (*infinitiy surrogate.*)
+let unittest = false
+;;
+let counting = true
+;;
+let n = 3 (*infinity surrogate.*)
 ;;
 let web = true;
 ;;
 let p () = printf "\n<p>\n"
 ;;
-let preamble() = 
-  if web then
-    (
-      printf "%s"
-	"<script type=\"text/x-mathjax-config\">
+let mathjax() =
+  if web
+  then (
+    printf "%s"
+      "<script type=\"text/x-mathjax-config\">
   MathJax.Hub.Config({
     extensions: [\"tex2jax.js\"],
     jax: [\"input/TeX\", \"output/HTML-CSS\"],
@@ -27,12 +36,12 @@ let preamble() =
 </script>
 <script type=\"text/javascript\" src=\"path-to-MathJax/MathJax.js\">
 </script>";
-      
-      printf "%s\n" "<script type=\"text/javascript\" async
+    
+    printf "%s\n" "<script type=\"text/javascript\" async
   src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML\">
 </script>"
-    )
-  else (* Haven't figured out how to mae this work yet. *)
+  )
+  else (* Haven't figured out how to make this work yet. *)
     printf "%s\n" "<script type=\"text/javascript\" async
   src=\"/home/hendrik/MathJax.js\">
 </script>"
@@ -41,7 +50,7 @@ type ord = Exp of (ord * ord) | Mul of (ord * ord) | Add of (ord * ord) | Omega 
 ;;
 let rec print x =
     match x with
-      Exp (a, b) -> (print a; printf "^"; print b)
+      Exp (a, b) -> (print a; printf "^{"; print b; printf"}")
     | Mul (a, b) -> (print a; printf " "; print b) (* Unfortunately, mathjax takes the space out again, possibly fusing digits into an unintended number.  Well, maybe it won't happen in the ordinals I'm printing  *)
     | Add (a, b) -> (print a; printf "+"; print b)
     | Omega -> printf "\\omega"
@@ -50,15 +59,16 @@ let rec print x =
 let test i = (printf "$"; print i; printf "$ \n")
 ;;
 
-test (Int 0);
-
-test (Int 2);
-test Omega;
-test (Add (Omega, Int 0));
-test (Add (Omega, Int 1));
-test (Mul (Int 4, Int 5));
-test (Exp (Int 4, Int 5));
-
+if unittest
+then(
+  test (Int 0);
+  test (Int 2);
+  test Omega;
+  test (Add (Omega, Int 0));
+  test (Add (Omega, Int 1));
+  test (Mul (Int 4, Int 5));
+  test (Exp (Int 4, Int 5));
+)
 ;;
 let rec simplify x =
   match x with
@@ -103,179 +113,161 @@ let rec simplify x =
 ;;
 let t i = (printf "$$"; print i; printf " = "; print (simplify i); printf "$$\n")
 ;;
+if unittest
+then(
+  
+  t (Int 0);
 
-t (Int 0);
-
-t (Int 2);
-t Omega;
-t (Add (Omega, Int 0));
-t (Add (Omega, Int 1));
-t (Mul (Int 4, Int 5));
-t (Exp (Int 4, Int 5));
-
-t(Exp (Int 0, Omega));
-t(Exp (Int 1, Omega));
-t(Exp (Omega, Int 0));
-t(Exp (Omega, Int 1));
-
-t(Mul (Int 0, Omega));
-t(Mul (Int 1, Omega));
-t(Mul (Omega, Int 0));
-t(Mul (Omega, Int 1));
-
-t(Add (Int 0, Omega));
-t(Add (Int 1, Omega));
-t(Add (Omega, Int 0));
-t(Add (Omega, Int 1));
-
-t(Add (Exp(Omega, Int 0), Int 7));
-t(Add (Exp(Omega, Int 1), Int 7));
-
-t(Add (Mul(Exp(Omega, Int 0), Int 0), Int 7));
-t(Add (Mul(Exp(Omega, Int 0), Int 1), Int 7));
-t(Add (Mul(Exp(Omega, Int 1), Int 0), Int 7));
-t(Add (Mul(Exp(Omega, Int 1), Int 1), Int 7));
+  t (Int 2);
+  t Omega;
+  t (Add (Omega, Int 0));
+  t (Add (Omega, Int 1));
+  t (Mul (Int 4, Int 5));
+  t (Exp (Int 4, Int 5));
+  
+  t(Exp (Int 0, Omega));
+  t(Exp (Int 1, Omega));
+  t(Exp (Omega, Int 0));
+  t(Exp (Omega, Int 1));
+  
+  t(Mul (Int 0, Omega));
+  t(Mul (Int 1, Omega));
+  t(Mul (Omega, Int 0));
+  t(Mul (Omega, Int 1));
+  
+  t(Add (Int 0, Omega));
+  t(Add (Int 1, Omega));
+  t(Add (Omega, Int 0));
+  t(Add (Omega, Int 1));
+  
+  t(Add (Exp(Omega, Int 0), Int 7));
+  t(Add (Exp(Omega, Int 1), Int 7));
+  
+  t(Add (Mul(Exp(Omega, Int 0), Int 0), Int 7));
+  t(Add (Mul(Exp(Omega, Int 0), Int 1), Int 7));
+  t(Add (Mul(Exp(Omega, Int 1), Int 0), Int 7));
+  t(Add (Mul(Exp(Omega, Int 1), Int 1), Int 7));
+)
 ;;
-let show i = (printf "$"; print (simplify i); printf "$")
+let inquote = ref false;
 ;;
-(* ---- *)
-preamble();
-printf "John Baez started counting.\n";
-p();
-printf "\n\"";
-for i = 1 to n do printf " %d," i done;
-printf " ... \"";
-p();
-printf "\nAfter a long while, he noticed that the stars had all gone out, and even the black holes were dissipating.\nHe went on counting.\n";
-p();
-printf "<p>";
-for i = 1 to n do show (Int (467837845 + i)); printf ", " done;
-printf " ... \"\n";
-printf "\nAfter much more time, he noticed he had run out of natural numbers and that the universe was over and done with.  Interesting, he thought.  I never thought I would live this long.  He went on counting.";
-p();
+let quote() = if !inquote then () else (printf "<p>\""; inquote := true)
+;;
+let unquote() = if !inquote then (printf "\".\n"; inquote := false) else ()
+;;
+let so_on() = (printf "... "; unquote())
+;;
+let showord i = (printf "$"; print (simplify i); printf "$")
+;;
+let text0() = (
+  unquote();
+  printf "John Baez started counting.\n";
+  p();
+  quote()
+)
+;;
+let textomega() = (
+(*  for i = 1 to n do printf " %d," i done;a\a\\
+  printf " ... "; unquote;
+  p();
+*)
+  unquote();
+  printf "\nAfter a long while, he noticed that the stars had all gone out, and even the black holes were dissipating.\nHe went on counting.\n";
+  quote();
+  for i = 1 to n do showord (Int (467837845 + i)); printf ", " done;
+  so_on();
+  p();
+  unquote();
+  printf "\nAfter much more time, he noticed he had run out of natural numbers and that the universe was over and done with.  Interesting, he thought.  I never thought I would live this long.  He went on counting.";
+  p();
+);
+
+(*
 printf "\"";
-for i = 1 to n do show (Add(Omega, Int i)); printf ", "  done;
+for i = 1 to n do showord (Add(Omega, Int i)); printf ", "  done;
 printf " ... \"\n";
 p();
 
 printf "<p><p>End preamble <p><p>"
-  ;;
-
-let omegas j = (
-  printf "Eventually he ran out of natural numbers again.  That didn't stop him.  He'd just usee ";
-  printf "$"; print (Add (simplify (Mul(Omega, (Int (j - 1)))), Omega));
-  printf"$.";
-  p();
-  printf "Wait! Better call that $\\omega %d$." j;
-  p();
-  printf "\"";
-  for i = 1 to n do printf "$\\omega %d + %d$, " j i done;
-  printf " ... \"\n";
-  p();)
-;;
-(*
-  for j = 2 to n do omegas j done
-;
 *)
-printf "Eventually he ran out of natural numbers to count the number of times he had run out of natural numbers.  That didn't stop him.  He'd just usew $\\omega \\omega$, or rather, $\\omega$ squared.";
-
 ;;
-let omegas2 prefix j = (
-  p();
-(*  printf "Wait! Better call that $\\omega^2 + \\omega %d$." j; 
-    p(); *)
-  printf "\"";
-  for i = 1 to n
-  do show (Add (prefix, (Add(Exp(Omega, (Int 2)), Add(Mul(Omega, Int j), Int i)))));
-    printf ", ";
-  done;
-  printf " ... \"\n";
-  p();
-  printf "Eventually he ran out of natural numbers again.  That didn't stop him.  He'd just usex ";
-  show (Add (prefix, (Add(Exp(Omega, (Int 2)), (Mul(Omega, Int (j + 1)))))));
-  printf "."
+
+let text n = (
+  if counting
+  then printf "{%d}" n;
+  match n with
+    0 -> text0()
+  | 4 -> textomega()
+  | _ -> ()
 )
+;;
+let count = ref 0
+  ;;
+let show i =
+  (
+    text !count;
+    count := !count + 1;
+    quote();
+    showord i
+  )
+let showuq i =
+  (
+    unquote();
+    text !count;
+    count := !count + 1;
+    showord i
+  )
 ;;
 
 (* for j = 0 to n do omegas2 (Int 0) j done; *)
-
-p();
-printf "... ";
-p()
-;;
-
-let ome prefix = (* m = 0 *)
-  (
-    for j = 1 to n
-    do (*printf "!!!!! omegasm %d starting !!!!!" m;*)
-      let pf = Add( prefix, Mul(Exp(Omega, (Int 0)), Int j))
-      in
-	 (*printf "<p>prefix is "; show pf; printf "<p>";*)
-      for i = 0 to n
-      do show(Add(prefix, (Int i)))
-      done;
-      p();
-      printf "\"";
-	 (*
-	   for i = 1 to n
-	   do show (Add preefix, Mul(Exp(Omega, (Int 0)), Int j),  Int i)));
-	   printf ", ";
-	   done;
-	 *)
-      printf " ... \"\n";
-      p();
-      printf "Eventually he ran out of natural numbers again.  That didn't stop him.  He'd just useq ";
-      show (Add (pf, Mul(Exp(Omega, (Int 0)), Int (j + 1))));
-      printf "."
-    done;
-  )
-;;
 let rec omegasm prefix m = (* precondition: m >= 2 *)
-  (printf "<p> level %d <p>" m;
+  ( (*printf "<p> level %d <p>" m; *)
       for j = 0 to n
       do
 	 let pf = Add( prefix, Mul(Exp(Omega, (Int m)), Int j))
 	 in
 	 (
-	   if m > 0
-	   then (printf "Using ";
-		 if false then show (Add (pf, Exp(Omega, (Int m)) ))
-		   else show pf;
-		 (* Not clear under which circumstance we want to print this.
-		    printf "; that is, ";
-		    show (Add( prefix, Mul(Exp(Omega, (Int m)), Int (j+1))));
-		 *)
+(*	   if m > 0
+	   then ( (*printf "Using ";*)
+		 show pf;
 		 printf "."
 	   );
-	 (*printf "<p>prefix is "; show pf; printf "<p>";*)
+*)
 	   if m > 0
 	   then omegasm pf (m - 1)
  	   else show pf;
-	 (*
-	   for i = 1 to n
-	   do show (Add preefix, Mul(Exp(Omega, (Int m)), Int j),  Int i)));
-	   printf ", ";
-	   done;
-	 *)
 	   if m > 0
 	   then (
-	     p();
-	     printf "\"";
-	     printf " ... \"\n";
+	     so_on();
 	     p())
 	   else printf ", ";
 	   if m > 0
-	   then (printf "Eventually he ran out of natural numbers again.  That didn't stop him.  He'd just uset ";
-		 if true then show (Add (pf, Exp(Omega, (Int m)) ))
-		   else show pf;
-		 (* Not clear under which circumstance we want to print this.
-		    printf "; that is, ";
-		    show (Add( prefix, Mul(Exp(Omega, (Int m)), Int (j+1))));
-		 *)
-		 printf "."
+	   then (if !count > 5
+	     then(
+	       printf "Eventually5 he ran out of natural numbers again.  That didn't stop him.  He'd just uset ";
+	       if true then showuq (Add (pf, Exp(Omega, (Int m)) ))
+	       else show pf;
+	       printf ".";
+	       p()
+	     )
 	   );
 	 )
       done;
   )
 ;;
-omegasm (Int 0) 3
+if html then mathjax();
+omegasm (Int 0) 3;
+printf("...<p>Eventually he ran out of integers for the powers of omega.  Never mind, he had all the ordinals available to count powers of omega.");
+for m = 1 to 2
+do for l = 0 to n
+  do for k = 1 to n
+    do omegasm (Mul
+		  ( Exp( Omega,
+			 Add(
+			   Mul(Omega, (Int m)),
+			 Int l)),
+		    Int k)) 3
+    done
+  done
+done
+
