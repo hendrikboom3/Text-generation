@@ -6,22 +6,37 @@ Unfortunately, I can't read the result properly, because the amount of mathemati
 open Printf
 open Sys
 
-let html = true
+let html = ref false
 ;;
-let unittest = false
+let unittest = ref false
+;;
+for i = 0 to Array.length Sys.argv - 1
+do if 0 = String.compare Sys.argv.(i) "--html"
+  then html := true
+  else  if 0 = String.compare Sys.argv.(i) "--unittest"
+    then unittest := true;
+done
+
+let html = !html
+;;
+let unittest = !unittest
 ;;
 let counting = true
 ;;
 let n = 3 (*infinity surrogate.*)
 ;;
-let web = true;
+let web = html && true; (* whether to get mathjax from web or from a file *)
 ;;
-let p () = printf "\n<p>\n"
+let p () = if html then printf "\n<p>\n" else printf "\n\n"
+;;
+let math() = if html then printf("$") else printf "\\("
+;;
+let unmath() = if html then printf "$" else printf "\\)"
 ;;
 let mathjax() =
-  if web
-  then (
-    printf "%s"
+    if web
+    then (
+      printf "%s"
       "<script type=\"text/x-mathjax-config\">
   MathJax.Hub.Config({
     extensions: [\"tex2jax.js\"],
@@ -36,15 +51,33 @@ let mathjax() =
 </script>
 <script type=\"text/javascript\" src=\"path-to-MathJax/MathJax.js\">
 </script>";
-    
-    printf "%s\n" "<script type=\"text/javascript\" async
+      
+      printf "%s\n" "<script type=\"text/javascript\" async
   src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML\">
 </script>"
-  )
-  else (* Haven't figured out how to make this work yet. *)
-    printf "%s\n" "<script type=\"text/javascript\" async
+    )
+    else (* Haven't figured out how to make this work yet. *)
+      printf "%s\n" "<script type=\"text/javascript\" async
   src=\"/home/hendrik/MathJax.js\">
 </script>"
+;;
+let endhtml() = ()
+;;
+let starttex() =
+  printf "\\documentclass{article}\n\\usepackage{mathtools}\n\\begin{document}\n"
+;;
+let endtex() =
+  printf "\\end{document}\n"
+    ;;
+let prefix() =
+  if html
+  then mathjax()
+  else starttex()
+;;
+let postfix() =
+  if html
+  then endhtml()
+  else endtex()
 ;;
 type ord = Exp of (ord * ord) | Mul of (ord * ord) | Add of (ord * ord) | Omega | Int of int
 ;;
@@ -111,7 +144,7 @@ let rec simplify x =
   | _ -> x
 
 ;;
-let t i = (printf "$$"; print i; printf " = "; print (simplify i); printf "$$\n")
+let t i = (math(); print i; printf " = "; print (simplify i); unmath(); printf "\n")
 ;;
 if unittest
 then(
@@ -151,13 +184,13 @@ then(
 ;;
 let inquote = ref false;
 ;;
-let quote() = if !inquote then () else (printf "<p>\""; inquote := true)
+let quote() = if !inquote then () else (p(); printf "\""; inquote := true)
 ;;
 let unquote() = if !inquote then (printf "\".\n"; inquote := false) else ()
 ;;
 let so_on() = (printf "... "; unquote())
 ;;
-let showord i = (printf "$"; print (simplify i); printf "$")
+let showord i = (math(); print (simplify i); unmath())
 ;;
 let text0() = (
   unquote();
@@ -188,13 +221,13 @@ for i = 1 to n do showord (Add(Omega, Int i)); printf ", "  done;
 printf " ... \"\n";
 p();
 
-printf "<p><p>End preamble <p><p>"
+p(); p(); printf "End preamble"; p(); p();
 *)
 ;;
 
 let text n = (
   if counting
-  then printf "{%d}" n;
+  then (if html then printf "{%d}" n);
   match n with
     0 -> text0()
   | 4 -> textomega()
@@ -219,9 +252,8 @@ let showuq i =
   )
 ;;
 
-(* for j = 0 to n do omegas2 (Int 0) j done; *)
-let rec omegasm prefix m = (* precondition: m >= 2 *)
-  ( (*printf "<p> level %d <p>" m; *)
+let rec omegapoly prefix m = (* precondition: m >= 2 *)
+  ( (*p(); printf " level %d" m; p();*)
       for j = 0 to n
       do
 	 let pf = Add( prefix, Mul(Exp(Omega, (Int m)), Int j))
@@ -234,7 +266,7 @@ let rec omegasm prefix m = (* precondition: m >= 2 *)
 	   );
 *)
 	   if m > 0
-	   then omegasm pf (m - 1)
+	   then omegapoly pf (m - 1)
  	   else show pf;
 	   if m > 0
 	   then (
@@ -244,7 +276,7 @@ let rec omegasm prefix m = (* precondition: m >= 2 *)
 	   if m > 0
 	   then (if !count > 5
 	     then(
-	       printf "Eventually5 he ran out of natural numbers again.  That didn't stop him.  He'd just uset ";
+	       printf "Eventually he ran out of natural numbers again.  That didn't stop him.  He'd just use ";
 	       if true then showuq (Add (pf, Exp(Omega, (Int m)) ))
 	       else show pf;
 	       printf ".";
@@ -255,19 +287,25 @@ let rec omegasm prefix m = (* precondition: m >= 2 *)
       done;
   )
 ;;
-if html then mathjax();
-omegasm (Int 0) 3;
-printf("...<p>Eventually he ran out of integers for the powers of omega.  Never mind, he had all the ordinals available to count powers of omega.");
-for m = 1 to 2
-do for l = 0 to n
-  do for k = 1 to n
-    do omegasm (Mul
-		  ( Exp( Omega,
-			 Add(
-			   Mul(Omega, (Int m)),
-			 Int l)),
-		    Int k)) 3
+prefix();
+omegapoly (Int 0) 3;
+printf("...");
+p();
+printf("Eventually he ran out of integers for the powers of omega.  Never mind, he had all the ordinals available to count powers of omega.");
+if true
+then
+  for m = 1 to 2 
+  do for l = 0 to n
+    do for k = 1 to n
+      do omegapoly (Mul
+		    ( Exp( Omega,
+			   Add(
+			     Mul(Omega, (Int m)),
+			     Int l)),
+		      Int k)) 3
+      done
     done
-  done
-done
-
+  done;
+p();
+printf "To be continued, when reality catches up with this story.";
+postfix();
