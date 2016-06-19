@@ -29,6 +29,10 @@ The math on the page overloads my browser.  iceweasel/firefoxx gave up long ago.
 
 Perhaps I should try again with straight LATEX output.  Who knows?  It might be practical.
 
+2016 06 19
+
+Indeed, straight LATEX output works a lot better.  Once pdflatex is through with it, which is fast, the browser is completely happy with the pdf file.
+
 ## Discussion on various ways to approach the problem
 
 Set my ordinals and counting aside.  They were fun, they produced words, but they lead nowhere.  Though I still would like to get the flavour text into the ordinal program sometime.  But probably not for ths month. 
