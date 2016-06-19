@@ -43,6 +43,8 @@ Set my ordinals and counting aside.  They were fun, they produced words, but the
   * As a dungeonmaster, I've always based everything on a map.  Is this feasible here?
   * First-order logic as a notation?
   * Triples store and is-a relations as a simplified first-order logic?
+    * Three relationships -- subset, partof, seealso.
+      * Seealso is unlikely to be used mechanically.
   * A transition calculus.  (Linear logic was used tor this)
 * Characters, with motives, abilities, knowledge and limitations.
   * Knowledge -- represented like the model, but tagged with who knows it.  Or, equivalently, an entire world model for each character
