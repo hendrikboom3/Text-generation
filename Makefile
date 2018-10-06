@@ -10,12 +10,3 @@ README.html: README.md
 	omd README.md >README.html
 resources.html: resources.md
 	omd resources.md >resources.html
-count.html: count.ml
-	ocaml count.ml >count.html
-unittest: count.ml
-	ocaml count.ml --unittest >unittest
-ord.html: ord.ml
-	ocaml ord.ml --mathml >ord.html
-ord.pdf: ord.ml
-	ocaml ord.ml >ord.tex
-	pdflatex ord.tex
