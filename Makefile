@@ -15,7 +15,7 @@ count.html: count.ml
 unittest: count.ml
 	ocaml count.ml --unittest >unittest
 ord.html: ord.ml
-	ocaml ord.ml --html >ord.html
+	ocaml ord.ml --mathml >ord.html
 ord.pdf: ord.ml
 	ocaml ord.ml >ord.tex
 	pdflatex ord.tex

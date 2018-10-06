@@ -6,22 +6,32 @@ Unfortunately, I can't read the result properly, because the amount of mathemati
 open Printf
 open Sys
 
+let mathjax = ref false
+;;
+let mathml = ref false
+;;
 let html = ref false
 ;;
 let unittest = ref false
 ;;
 for i = 0 to Array.length Sys.argv - 1
-do if 0 = String.compare Sys.argv.(i) "--html"
+do if 0 = String.compare Sys.argv.(i) "--mathjax"
+  then (html := true; mathjax := true)
+  else if 0 = String.compare Sys.argv.(i) "--mathml"
+  then (html := true; mathml := true)
+  else if 0 = String.compare Sys.argv.(i) "--html"
   then html := true
   else  if 0 = String.compare Sys.argv.(i) "--unittest"
     then unittest := true;
+  if !html && not !mathjax
+  then mathml := true;
 done
 
 let html = !html
 ;;
 let unittest = !unittest
 ;;
-let counting = true
+let counting = false
 ;;
 let n = 3 (*infinity surrogate.*)
 ;;
@@ -29,11 +39,11 @@ let web = html && true; (* whether to get mathjax from web or from a file *)
 ;;
 let p () = if html then printf "\n<p>\n" else printf "\n\n"
 ;;
-let math() = if html then printf("$") else printf "\\("
+let math() = if !mathjax then printf "$" else if !mathml then printf "<math>" else printf "\\("
 ;;
-let unmath() = if html then printf "$" else printf "\\)"
+let unmath() = if !mathjax then printf "$" else if !mathml then printf "</math>" else printf "\\)"
 ;;
-let mathjax() =
+let genmathjax() =
     if web
     then (
       printf "%s"
@@ -71,7 +81,9 @@ let endtex() =
     ;;
 let prefix() =
   if html
-  then mathjax()
+  then if !mathjax
+    then genmathjax()
+    else ()
   else starttex()
 ;;
 let postfix() =
@@ -82,12 +94,22 @@ let postfix() =
 type ord = Exp of (ord * ord) | Mul of (ord * ord) | Add of (ord * ord) | Omega | Int of int
 ;;
 let rec print x =
+  if !mathml
+  then
+    match x with
+      Exp (a, b) -> (printf"<mrow>"; print a; printf "<sup>"; print b; printf"</sup></mrow>")
+    | Mul (a, b) -> (printf"<mrow>"; print a; printf "<mo>&InvisibleTimes;</mo>"; print b; printf"</mrow>") (* Unfortunately, mathjax takes the space out again, possibly fusing digits into an unintended number.  Well, maybe it won't happen in the ordinals I'm printing  *)
+    | Add (a, b) -> (printf"<mrow>";  print a; printf " <mo>+</mo> "; print b; printf"</mrow>")
+    | Omega -> printf "&omega;"
+    | Int i -> printf "<mn>%d</mn>" i
+  else
     match x with
       Exp (a, b) -> (print a; printf "^{"; print b; printf"}")
     | Mul (a, b) -> (print a; printf " "; print b) (* Unfortunately, mathjax takes the space out again, possibly fusing digits into an unintended number.  Well, maybe it won't happen in the ordinals I'm printing  *)
     | Add (a, b) -> (print a; printf "+"; print b)
     | Omega -> printf "\\omega"
     | Int i -> printf "%d" i
+    
 ;;
 let test i = (printf "$"; print i; printf "$ \n")
 ;;
@@ -184,7 +206,7 @@ then(
 ;;
 let inquote = ref false;
 ;;
-let quote() = if !inquote then () else (p(); printf "\""; inquote := true)
+let quote() = if !inquote then () else (p(); printf (if html then "\"" else "``"); inquote := true)
 ;;
 let unquote() = if !inquote then (printf "\".\n"; inquote := false) else ()
 ;;
@@ -207,7 +229,7 @@ let textomega() = (
   unquote();
   printf "\nAfter a long while, he noticed that the stars had all gone out, and even the black holes were dissipating.\nHe went on counting.\n";
   quote();
-  for i = 1 to n do showord (Int (467837845 + i)); printf ", " done;
+  for i = 1 to n do printf"4689385737876899370035104528984678378457%d, " i done;
   so_on();
   p();
   unquote();
@@ -307,5 +329,5 @@ then
     done
   done;
 p();
-printf "To be continued, when reality catches up with this story.";
+printf "\n\nWhatever will John Baez do next?  Read the sequel, to be available when reality finally catches up with this story.";
 postfix();

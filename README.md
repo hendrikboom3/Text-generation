@@ -20,8 +20,8 @@ I found it surprisingly difficult to get the details of English number syntax ri
 
 I did that, by building a new data structure to express the ordinals.  These can easily be constructed in uniform loops.  I no longer need to mess with the control flow to avoid printing expressions involving zeros and ones, because I use a generic simplification routine to reduce things like omega squared times zero plus seven to just seven, making it look idiomatic.  That part is now working, but it is not well-intergrated with the narrative.  I will next have to provide hooks to get the appropriate story narrative in the proper places.  The trick is to introduce the patterns in the numbers when they first become relevant, and the to say the equivalent of "more of same".
 
-It now counts up to  $omega^{\omega 2+3} 3+\omega^{3} 3+\omega^{3}$
-the Unix wc utility tells me it has 69988 words, some of which are surely HTML tags.
+It now counts up to  $omega^{\omega 2+3} 3+\omega^{3} 3+\omega^{3}$.
+The Unix wc utility tells me it has 69988 words, some of which are surely HTML tags.
 
 I now have a new appreciation for the size of these constructive ordinals.  And this isn't even close to the league of big constructive ordinals.
 
@@ -43,9 +43,16 @@ Set my ordinals and counting aside.  They were fun, they produced words, but the
   * As a dungeonmaster, I've always based everything on a map.  Is this feasible here?
   * First-order logic as a notation?
   * Triples store and is-a relations as a simplified first-order logic?
-    * Three relationships -- subset, partof, seealso.
+    * From ontoogy, three relationships -- subset, partof, seealso.
       * Seealso is unlikely to be used mechanically.
-  * A transition calculus.  (Linear logic was used tor this)
+    * Perhaps also an isa, for set membership?
+      * Time to reread the opencyc tutorial.  It uses a triple store.
+        * Google search for [ocaml opencyc](https://www.google.ca/search?q=ocaml+opencyc&ie=utf-8&oe=utf-8&gws_rd=cr&ei=VfxrV4i9EYHk-wHj7YQY) seems profitable. 
+  * A transition calculus.  (Linear logic has been used tor this)
+  * There's a system OpenCyc that claims to be a database of common sense and general knowledge.  Is this relevant?
+    * Its web site starts [here](http://www.opencyc.org/).
+    * Its [developer documentatation](http://dev.cyc.com/)
+    * I haven't found anything indicating that, say, emotions might trigger actions.  Such cause and effect would seem to be a necessary part of any kind of plot driver.  Surely that kind of thing would count as common sence knowledge.
 * Characters, with motives, abilities, knowledge and limitations.
   * Knowledge -- represented like the model, but tagged with who knows it.  Or, equivalently, an entire world model for each character
   * actions can be formulated in a linear-logic style.  But not naively, if we also have other kinds of deduction around.
@@ -68,10 +75,11 @@ This seems a lot to set up in what remains of a month.  Unless tools for this ar
 
 Continue brainstorming.
   
-* Implementations of purpose: The/Each character has motivations.  These can differe among characters.
+* Implementations of purpose: The/Each character has motivations.  These can differ among characters.
   * This could be reflected in a set of kind of actions he prefers doing.
   * It could be reflected in an evaluaton function of states likely to be achieved by actions.
   * Could do a partial action tree search to determine what's best.
+    * The key word here is "partial".
   * There's room for some logic, perhaps special-purpose code, here.
   * The evaluation function could be somewhat random instead of being the usual weighted sum.
 
